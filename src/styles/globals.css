@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* Self-hosted, subset fonts (Latin + ₹ only) */
+@font-face {
+  font-family: "Luckiest Guy";
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/luckiest-guy.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 400;
+  src: url("/fonts/poppins-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 500;
+  src: url("/fonts/poppins-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 600;
+  src: url("/fonts/poppins-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/poppins-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 500;
+  src: url("/fonts/poppins-rupee-500.woff2") format("woff2");
+  unicode-range: U+20B9;
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 600;
+  src: url("/fonts/poppins-rupee-600.woff2") format("woff2");
+  unicode-range: U+20B9;
+}
+@font-face {
+  font-family: "Poppins";
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/poppins-rupee-700.woff2") format("woff2");
+  unicode-range: U+20B9;
+}
+
+/* Avadh brand tokens */
+@theme {
+  --color-red: #d7141d;
+  --color-red-dark: #a80f15;
+  --color-red-soft: #fde7e4;
+  --color-yellow: #ffb81e;
+  --color-orange: #f15a24;
+  --color-cream: #fff8ee;
+  --color-ink: #1f1414;
+  --color-muted: #6f6262;
+  --color-line: #ecdfcf;
+
+  --font-display: "Luckiest Guy", "Arial Black", sans-serif;
+  --font-sans: "Poppins", system-ui, sans-serif;
+
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root {
+  color-scheme: light;
+}
+html {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+}
+:focus-visible {
+  outline: 3px solid var(--color-yellow);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+}
+
+/* Drop shadow for cut-outs; a single layer keeps it cheap */
+.cutout {
+  filter: drop-shadow(0 18px 20px rgb(31 20 20 / 0.28));
+}
+@media (max-width: 639px) {
+  .cutout {
+    filter: drop-shadow(0 8px 10px rgb(31 20 20 / 0.25));
+  }
+}
+
+/* Outlined marquee text */
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(215 20 29 / 0.22);
+}
+
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.float {
+  animation: float 5s ease-in-out infinite alternate;
+}
+@keyframes float {
+  from {
+    translate: 0 -8px;
+  }
+  to {
+    translate: 0 8px;
+  }
+}
+
+/* Calculator sliders: the filled track is painted inline from the value */
+.calc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.calc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 5px solid var(--color-red);
+  box-shadow: 0 4px 10px rgb(215 20 29 / 0.35);
+  transition: transform 160ms var(--ease-out-strong);
+}
+.calc-range:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+.calc-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 5px solid var(--color-red);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee,
+  .float {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
