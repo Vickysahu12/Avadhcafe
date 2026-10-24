@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, m, useMotionValueEvent, useScroll } from 'motion/react'
 import { List, Phone, Storefront, X } from '@phosphor-icons/react'
 import { NAV_LEFT, NAV_RIGHT, PHONE } from '../../data/site'
 import { useEnquiry } from '../common/EnquiryModal'
-import { EASE } from '../ui/Reveal'
+import MobileMenu from './MobileMenu'
 
 const ALL = [...NAV_LEFT, ...NAV_RIGHT]
 
@@ -53,6 +53,7 @@ export default function Navbar() {
   const { scrollY } = useScroll()
   const [stuck, setStuck] = useState(false)
   const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
   useMotionValueEvent(scrollY, 'change', (v) => setStuck(v > 40))
 
   return (
@@ -67,8 +68,23 @@ export default function Navbar() {
             <a href={`tel:+91${PHONE}`} className="display hidden h-10 items-center gap-2 rounded-full bg-red px-4 pt-[3px] text-[13px] tracking-wide text-white transition-[background-color,transform] hover:bg-red-dark active:scale-[0.97] md:inline-flex">
               <Phone weight="fill" className="-mt-[3px] size-4" /> Call Now
             </a>
-            <button onClick={() => setOpen(true)} aria-label="Open menu" className="grid size-10 place-items-center rounded-full bg-red-soft text-red md:hidden">
-              <List weight="bold" className="size-5" />
+            <button
+              onClick={() => setOpen((o) => !o)}
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              className={`grid size-10 place-items-center rounded-full transition-colors duration-300 md:hidden ${open ? 'bg-red text-white' : 'bg-red-soft text-red'}`}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <m.span
+                  key={open ? 'x' : 'list'}
+                  initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
+                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                  exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {open ? <X weight="bold" className="size-5" /> : <List weight="bold" className="size-5" />}
+                </m.span>
+              </AnimatePresence>
             </button>
             <ul className="hidden items-center gap-5 lg:flex">
               {NAV_LEFT.map((l) => (
@@ -96,39 +112,7 @@ export default function Navbar() {
         </nav>
       </header>
 
-      <AnimatePresence>
-        {open && (
-          <m.div className="fixed inset-0 z-[55] md:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <button aria-label="Close menu" onClick={() => setOpen(false)} className="absolute inset-0 bg-ink/50" />
-            <m.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.4, ease: EASE }}
-              className="absolute inset-y-0 left-0 flex w-[82%] max-w-sm flex-col bg-red p-6 text-white"
-            >
-              <div className="flex items-center justify-between">
-                <img src="/ig/logo.jpg" alt="" className="size-14 rounded-full ring-4 ring-white/30" />
-                <button onClick={() => setOpen(false)} aria-label="Close menu" className="grid size-10 place-items-center rounded-full bg-white/15">
-                  <X weight="bold" className="size-5" />
-                </button>
-              </div>
-              <ul className="mt-10 space-y-1">
-                {ALL.map((l, i) => (
-                  <m.li key={l.href} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.12 + i * 0.05, duration: 0.4, ease: EASE }}>
-                    <a href={l.href} onClick={() => setOpen(false)} className={`display block py-2 text-3xl tracking-wide ${active === l.href ? 'text-yellow' : ''}`}>
-                      {l.label}
-                    </a>
-                  </m.li>
-                ))}
-              </ul>
-              <a href={`tel:+91${PHONE}`} className="display mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white pt-[3px] text-red">
-                <Phone weight="fill" className="-mt-[3px] size-4" /> Call Now
-              </a>
-            </m.div>
-          </m.div>
-        )}
-      </AnimatePresence>
+      <MobileMenu open={open} onClose={close} active={active} onEnquire={enquire} />
     </>
   )
 }
