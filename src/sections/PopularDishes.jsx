@@ -15,7 +15,7 @@ export default function PopularDishes({ active, onChange }) {
   }, [active])
 
   return (
-    <section id="dishes" className="relative scroll-mt-24 pb-16 pt-6 sm:pb-24">
+    <section id="dishes" className="relative scroll-mt-24 overflow-x-clip pb-16 pt-6 sm:pb-24">
       {/* Yellow band behind the lower half of the card */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 top-[38%] bg-yellow" />
 

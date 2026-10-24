@@ -18,7 +18,7 @@ export default function Offers() {
   }
 
   return (
-    <section className="px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
+    <section className="overflow-x-clip px-4 pb-16 pt-6 sm:px-5 sm:pb-20">
       <Reveal className="relative mx-auto max-w-[1060px]">
         <div className="relative overflow-hidden rounded-[28px] bg-yellow px-6 py-14 text-center sm:px-16 sm:py-16">
           <div aria-hidden className="absolute -left-20 -top-20 size-64 rounded-full bg-white/20" />
